@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "576950379097",
+    "project_id": "codecraft-8a4b3",
+    "storage_bucket": "codecraft-8a4b3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576950379097:android:aab63051b11153886f0748",
+        "android_client_info": {
+          "package_name": "com.example.codecraft"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvm7KnLHKP25QsupBpbDxgZYAl6EUbmpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
