@@ -16,7 +16,7 @@ void main() async {
             apiKey: "AIzaSyB0z8xhXx6caKxTsgyPBa7EO9xQNs52NA0",
             authDomain: "codecraft-8a4b3.firebaseapp.com",
             projectId: "codecraft-8a4b3",
-            storageBucket: "codecraft-8a4b3.firebasestorage.app",
+            storageBucket: "codecraft-8a4b3.appspot.com",
             messagingSenderId: "576950379097",
             appId: "1:576950379097:web:05b756a658efd8026f0748",
             measurementId: "G-3YHW1F9D9T"));
@@ -50,12 +50,12 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             return HomePage();
           } else {
-            return const LoginPage();
+            return const SignInScreen();
           }
         },
       ),
       routes: {
-        LoginPage.routeName: (BuildContext context) => const LoginPage(),
+        SignInScreen.routeName: (BuildContext context) => const SignInScreen(),
         HomePage.routeName: (BuildContext context) => HomePage(),
         MenuPage.routeName: (BuildContext context) => MenuPage(),
         ProfileSetup.routeName: (BuildContext context) => ProfileSetup(), // เพิ่มเส้นทางสำหรับ ProfileSetup
