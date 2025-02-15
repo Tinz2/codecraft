@@ -52,12 +52,12 @@ class ProfileSetup extends StatelessWidget {
           if (snapshot.hasData) {
             return HomePage();
           } else {
-            return const SignInScreen();
+            return const LoginPage();
           }
         },
       ),
       routes: {
-        SignInScreen.routeName: (BuildContext context) => const SignInScreen(),
+        LoginPage.routeName: (BuildContext context) => const LoginPage(),
         HomePage.routeName: (BuildContext context) => HomePage(),
         MenuPage.routeName: (BuildContext context) => MenuPage(),
         ProfileSetup.routeName: (BuildContext context) => ProfileSetup(), // เพิ่มเส้นทางสำหรับ ProfileSetup
