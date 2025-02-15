@@ -50,12 +50,12 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             return HomePage();
           } else {
-            return const LoginPage();
+            return MenuPage();
           }
         },
       ),
       routes: {
-        LoginPage.routeName: (BuildContext context) => const LoginPage(),
+        LoginPage.routeName: (BuildContext context) => LoginPage(),
         HomePage.routeName: (BuildContext context) => HomePage(),
         MenuPage.routeName: (BuildContext context) => MenuPage(),
         ProfileSetup.routeName: (BuildContext context) => ProfileSetup(), // เพิ่มเส้นทางสำหรับ ProfileSetup
