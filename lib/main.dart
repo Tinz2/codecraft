@@ -58,7 +58,8 @@ class MyApp extends StatelessWidget {
         LoginPage.routeName: (BuildContext context) => LoginPage(),
         HomePage.routeName: (BuildContext context) => HomePage(),
         MenuPage.routeName: (BuildContext context) => MenuPage(),
-        ProfileSetup.routeName: (BuildContext context) => ProfileSetup(), // เพิ่มเส้นทางสำหรับ ProfileSetup
+        ProfileSetup.routeName: (BuildContext context) =>
+            ProfileSetup(), // เพิ่มเส้นทางสำหรับ ProfileSetup
       },
     );
   }
