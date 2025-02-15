@@ -13,7 +13,6 @@ class Archivement extends StatelessWidget {
       body: Center(
         child: Text('Welcome to the Archivement Page!'),
       ),
-      bottomNavigationBar: MenuPage(),
     );
   }
 }

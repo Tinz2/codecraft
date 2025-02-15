@@ -13,7 +13,6 @@ class Stage extends StatelessWidget {
       body: Center(
         child: Text('Welcome to the Stage Page!'),
       ),
-      bottomNavigationBar: MenuPage(),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-//น าเข้า auth.dart เพื่อเรียกเมธอดที่อยู่ auth.dart
+//นำเข้า auth.dart เพื่อเรียกเมธอดที่อยู่ auth.dart
 import 'auth.dart';
+import 'menu.dart';
+import 'sign_in.dart'; // เพิ่มการนำเข้า LoginPage
 
 class HomePage extends StatelessWidget {
   static const String routeName = '/home';
@@ -14,8 +16,8 @@ class HomePage extends StatelessWidget {
         actions: [
           TextButton.icon(
             onPressed: () async {
-              await _auth.signOut(
-                  context); // ส่ง context ไปยังฟังก์ชัน signOutเพื่อเรียกใช้ signout
+              await _auth.signOut(context); // ส่ง context ไปยังฟังก์ชัน signOutเพื่อเรียกใช้ signout
+              Navigator.pushReplacementNamed(context, LoginPage.routeName); // เพิ่มการนำทางไปยังหน้า LoginPage
             },
             icon: Icon(Icons.person, color: Colors.white),
             label: Text('Logout', style: TextStyle(color: Colors.white)),

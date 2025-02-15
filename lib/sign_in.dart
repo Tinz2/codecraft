@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //เรียกใช้หน้า auth.dart
 import 'auth.dart';
+import 'home_page.dart'; // เพิ่มการนำเข้า HomePage
+import 'profile_setup.dart';
+import 'menu.dart';
 
 class LoginPage extends StatefulWidget {
-//สร้างตัวแปร routeName เพื่อก าหนดชื่อเส้นทาง (Route) ส าหรับการน าทาง (Navigation) ไปยังหน้าต่าง ๆ ในแอป ตัวอย่างเช่น:
-// '/login' เป็ นชื่อเส้นทางที่เชื่อมโยงกับหน้า Login (หน้าล็อกอิน)
   static const String routeName = '/login';
   const LoginPage({super.key});
   @override
@@ -13,15 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //สร้าง _formKey เก็บค่าการป้ อนผ่านฟอร์ม
   final _formKey = GlobalKey<FormState>();
-//สร้างตัวแปรที่เป็ นตัวแทนของ AuthService เพื่อให้สามารถเรียกใช้งานเมธอดต่าง ๆ ในคลาส AuthService ได้ที่อยู่ที่หน้า auth.dart ได้
   final AuthService _auth = AuthService();
-  //กา หนดค่าเริ่มตน้ของ อีเมล์และรหัสผ่าน
   String _email = '';
   String _password = '';
-  bool _isLoading = false; // เพิ่ม state ส าหรับ Loading
-// แสดง Loading Indicator
+  bool _isLoading = false;
+
   void _setLoading(bool value) {
     setState(() {
       _isLoading = value;
@@ -76,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 16),
                 if (_isLoading)
-                  const CircularProgressIndicator() // แสดง Loading Indicator
+                  const CircularProgressIndicator()
                 else
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -86,9 +84,11 @@ class _LoginPageState extends State<LoginPage> {
                           if (_formKey.currentState!.validate()) {
                             _setLoading(true);
                             try {
-                              //เรียกใช้ฟัง์กชัน signInWithEmailAndpassword ที่หน้า auth.dart
+                              //เรียกใช้ฟัง์กชัน signInWithEmailAndPassword ที่หน้า auth.dart
                               await _auth.signInWithEmailAndPassword(
                                   _email, _password, context);
+                              Navigator.pushReplacementNamed(
+                                  context, MenuPage.routeName); // เพิ่มการนำทางไปยังหน้า HomePage
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -110,6 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                               //เรียกใช้ฟัง์กชัน registerWithEmailAndPassword ที่หน้า auth.dart
                               await _auth.registerWithEmailAndPassword(
                                   _email, _password, context);
+                              Navigator.pushReplacementNamed(
+                                  context, ProfileSetup.routeName);
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -125,6 +127,21 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () async {
+                    if (_email.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please enter your email'),
+                        ),
+                      );
+                    } else {
+                      await _auth.resetPassword(_email, context);
+                    }
+                  },
+                  child: const Text('Forgot Password?'),
+                ),
               ],
             ),
           ),
