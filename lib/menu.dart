@@ -17,7 +17,7 @@ class _MenuPageState extends State<MenuPage> {
     HomePage(),
     Stage(),
     Archivement(),
-    Profile(),
+    ProfilePage(),
   ];
 
   void _onTabTapped(int index) {
@@ -29,10 +29,14 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black, // ตั้งค่าสีพื้นหลังของ Scaffold เป็นสีดำ
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.black, // ตั้งค่าสีพื้นหลังของ BottomNavigationBar เป็นสีดำ
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
+        selectedItemColor: Colors.blue.shade300, // ตั้งค่าสีของไอเท็มที่ถูกเลือก
+        unselectedItemColor: Colors.white, // ตั้งค่าสีของไอเท็มที่ไม่ได้ถูกเลือก
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

@@ -3,85 +3,147 @@ import 'package:flutter/material.dart';
 //เรียกใช้หน้า auth.dart
 import 'auth.dart';
 import 'home_page.dart'; // เพิ่มการนำเข้า HomePage
+import 'profile_setup.dart';
+import 'menu.dart';
 
-class SignInScreen extends StatelessWidget {
-  static const String routeName = '/login'; // เพิ่ม routeName
+class LoginPage extends StatefulWidget {
+  static const String routeName = '/login';
+  const LoginPage({super.key});
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
 
-  const SignInScreen({super.key});
+class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final AuthService _auth = AuthService();
+  String _email = '';
+  String _password = '';
+  bool _isLoading = false;
+
+  void _setLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
+      appBar: AppBar(
+        title: const Text('Login / Sign Up'),
+      ),
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage("assets/profile.png"),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                "Sign in to your account",
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: "Email",
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _email = value.trim();
+                  },
                 ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: "Password",
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                const SizedBox(height: 16),
+                TextFormField(
+                  obscureText: true,
+                  decoration: const InputDecoration(labelText: 'Password'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _password = value.trim();
+                  },
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // เพิ่มโค้ดเพื่อนำทางไปยังหน้า HomePage
-                      Navigator.pushReplacementNamed(context, HomePage.routeName);
-                    },
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                    child: const Text(
-                      "Sign in",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
+                const SizedBox(height: 16),
+                if (_isLoading)
+                  const CircularProgressIndicator()
+                else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _setLoading(true);
+                            try {
+                              //เรียกใช้ฟัง์กชัน signInWithEmailAndPassword ที่หน้า auth.dart
+                              await _auth.signInWithEmailAndPassword(
+                                  _email, _password, context);
+                              Navigator.pushReplacementNamed(
+                                  context, MenuPage.routeName); // เพิ่มการนำทางไปยังหน้า HomePage
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Login failed: $e'),
+                                ),
+                              );
+                            } finally {
+                              _setLoading(false);
+                            }
+                          }
+                        },
+                        child: const Text('Sign In'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _setLoading(true);
+                            try {
+                              //เรียกใช้ฟัง์กชัน registerWithEmailAndPassword ที่หน้า auth.dart
+                              await _auth.registerWithEmailAndPassword(
+                                  _email, _password, context);
+                              Navigator.pushReplacementNamed(
+                                  context, ProfileSetup.routeName);
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Sign up failed: $e'),
+                                ),
+                              );
+                            } finally {
+                              _setLoading(false);
+                            }
+                          }
+                        },
+                        child: const Text('Sign Up'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                    child: const Text(
-                      "Sign up",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "Forget password ?",
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () async {
+                    if (_email.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please enter your email'),
+                        ),
+                      );
+                    } else {
+                      await _auth.resetPassword(_email, context);
+                    }
+                  },
+                  child: const Text('Forgot Password?'),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),

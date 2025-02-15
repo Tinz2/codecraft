@@ -1,17 +1,20 @@
+import 'package:codecraft/profile_setup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
 class AuthService {
-  //ประกาศตัวแปร _auth ให้สามารถเรียกใช้เมธอดและพร็อพเพอร์ตีส าคัญของ Class FirebaseAuth ได้
+  User? get currentUser => _auth.currentUser;
+//ประกาศตัวแปร _auth ให้สามารถเรียกใช้เมธอดและพร็อพเพอร์ตีส าคัญของ Class FirebaseAuth ได้
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Sign in with email and password
+// Sign in with email and password
   Future<UserCredential?> signInWithEmailAndPassword(
       String email, String password, BuildContext context) async {
     try {
       final userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      showSnackbar(context, 'เข้าสู่ระบบสำเร็จ');
+      showSnackbar(context, 'เข้าสู่ระบบส าเร็จ');
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -25,19 +28,23 @@ class AuthService {
     }
   }
 
-  // Register with email and password
+// Register with email and password
   Future<UserCredential?> registerWithEmailAndPassword(
       String email, String password, BuildContext context) async {
     try {
       final userCredential = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      showSnackbar(context, 'ลงทะเบียนสำเร็จ');
+      showSnackbar(context, 'ลงทะเบียนส าเร็จ');
+      if (userCredential.user != null) {
+// Redirect to profile setup
+        Navigator.pushReplacementNamed(context, ProfileSetup.routeName);
+      }
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         showSnackbar(context, 'รหัสผ่านที่ระบุไม่ปลอดภัย');
       } else if (e.code == 'email-already-in-use') {
-        showSnackbar(context, 'อีเมลนี้ถูกใช้งานไปแล้ว');
+        showSnackbar(context, 'อีเมลน์ ้ีถูกใชไ้ปแลว้');
       } else {
         showSnackbar(context, 'เกิดข้อผิดพลาด: ${e.message}');
       }
@@ -45,7 +52,7 @@ class AuthService {
     }
   }
 
-  // Sign out
+// Sign out
   Future<void> signOut(BuildContext context) async {
     try {
       await _auth.signOut();
@@ -55,10 +62,25 @@ class AuthService {
     }
   }
 
-  // Check if user is authenticated
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+//resetpassword
+  Future<void> resetPassword(String email, BuildContext context) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
 
-  // Method for showing Snackbar
+    try {
+      await auth.sendPasswordResetEmail(email: email);
+      print('Password reset email sent');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else {
+        print('Something went wrong: $e');
+      }
+    }
+  }
+
+// Check if user is authenticated
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+// Method for showing Snackbar
   void showSnackbar(BuildContext context, String message) {
     final snackBar = SnackBar(
       content: Text(message),
