@@ -262,22 +262,45 @@ class _Stage1ScreenState extends State<Stage1Screen> {
                         }),
                       ),
                     ),
+
+                  // Apple 1
                   Positioned(
-                    top: (_characterRow * (350 / 5)) + (350 / 10) - 25,
-                    left: (_characterCol * (350 / 5)) + (350 / 10) - 25,
-                    child: Image.asset(
-                      'assets/boy.png',
-                      width: 50,
-                      height: 50,
-                    ),
-                  ),
-                  Positioned(
-                    top: (0 * (350 / 5)) + (350 / 10) - (40 / 2),
-                    left: (2 * (350 / 5)) + (350 / 8) - (30 / 2),
+                    top: (0 * (350 / 5)) + (350 / 10) - 25,
+                    left: (4 * (350 / 5)) + (350 / 10) - 25,
                     child: Image.asset(
                       'assets/apple.png',
                       width: 30,
                       height: 40,
+                    ),
+                  ),
+                  // Apple 2
+                  Positioned(
+                    top: (0 * (350 / 5)) + (350 / 10) - 25,
+                    left: (0 * (350 / 5)) + (350 / 10) - 25,
+                    child: Image.asset(
+                      'assets/apple.png',
+                      width: 30,
+                      height: 40,
+                    ),
+                  ),
+                  // เจ้าชาย
+                  Positioned(
+                    top: (0 * (350 / 5)) + (350 / 10) - 25,
+                    left: (0 * (350 / 5)) + (350 / 10) - 25,
+                    child: Image.asset(
+                      'assets/boy.png',
+                      width: 60,
+                      height: 50,
+                    ),
+                  ),
+                  // เจ้าหญิง (ตำแหน่งที่ขยับได้)
+                  Positioned(
+                    top: (_characterRow * (350 / 5)) + (350 / 10) - 25,
+                    left: (_characterCol * (350 / 5)) + (350 / 10) - 25,
+                    child: Image.asset(
+                      'assets/girl.png',
+                      width: 50,
+                      height: 50,
                     ),
                   ),
                 ],

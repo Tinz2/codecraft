@@ -24,12 +24,11 @@ class Stage2Screen extends StatefulWidget {
 class _Stage2ScreenState extends State<Stage2Screen> {
   TextEditingController _answerController = TextEditingController();
   int _characterRow = 0;
-  int _characterCol = 0;
+  int _characterCol = 1; // เริ่มต้นเจ้าหญิงอยู่ที่ row 0, col 1
   bool _isGridVisible = false;
   bool _showAnswer = false;
   String _feedback = '';
 
-  // คำสั่งที่ถูกต้อง
   final List<String> correctCommands = [
     "justify-content: center;",
     "justify-content: space-between;",
@@ -46,15 +45,12 @@ class _Stage2ScreenState extends State<Stage2Screen> {
 
   void _moveCharacter(String command) {
     setState(() {
-      if (command == "justify-content: flex-end;") {
+      if (command == "justify-content: space-between;") {
         _characterRow = 0;
         _characterCol = 4;
       } else if (command == "justify-content: center;") {
         _characterRow = 0;
         _characterCol = 2;
-      } else if (command == "justify-content: space-between;") {
-        _characterRow = 0;
-        _characterCol = 4;
       } else if (command == "justify-content: space-around;") {
         _characterRow = 2;
         _characterCol = 3;
@@ -88,11 +84,10 @@ class _Stage2ScreenState extends State<Stage2Screen> {
 
   void _checkAnswer() {
     String answer = _answerController.text.trim();
-    if (answer == "justify-content: center;") {
+    if (answer == "justify-content: space-between;") {
       setState(() {
         _feedback = 'Correct! Well done!';
       });
-      // แสดง Dialog เมื่อคำตอบถูกต้อง
       _showCompletionDialog();
     } else {
       setState(() {
@@ -101,11 +96,10 @@ class _Stage2ScreenState extends State<Stage2Screen> {
     }
   }
 
-  // ฟังก์ชันสำหรับการแสดง Dialog
   void _showCompletionDialog() {
     showDialog(
       context: context,
-      barrierDismissible: false, // ไม่ให้ปิด dialog เมื่อคลิกที่นอก dialog
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           contentPadding: EdgeInsets.all(20),
@@ -114,7 +108,6 @@ class _Stage2ScreenState extends State<Stage2Screen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // แสดงตัวละคร
               Image.asset('assets/boy.png', width: 100, height: 100),
               SizedBox(height: 10),
               Text(
@@ -127,12 +120,9 @@ class _Stage2ScreenState extends State<Stage2Screen> {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               SizedBox(height: 10),
-              // ปุ่มที่ให้ไปยังหน้าถัดไป
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context); // ปิด dialog
-                  // ไปยังหน้าถัดไป
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => NextStage()));
                 },
                 child: Text('Go to Next Stage'),
               ),
@@ -141,12 +131,6 @@ class _Stage2ScreenState extends State<Stage2Screen> {
         );
       },
     );
-  }
-
-  void _logout() {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Logging out...")));
-    Navigator.pop(context);
   }
 
   @override
@@ -165,7 +149,9 @@ class _Stage2ScreenState extends State<Stage2Screen> {
               },
             ),
             TextButton(
-              onPressed: _logout,
+              onPressed: () {
+                Navigator.pop(context);
+              },
               child: Text(
                 'Logout',
                 style: TextStyle(color: Colors.white, fontSize: 18),
@@ -220,7 +206,7 @@ class _Stage2ScreenState extends State<Stage2Screen> {
             if (_showAnswer) ...[
               SizedBox(height: 10),
               Text(
-                "The correct answer is:\njustify-content: center;",
+                "The correct answer is:\njustify-content: space-between;",
                 style: TextStyle(color: Colors.red, fontSize: 16),
               ),
             ],
@@ -260,22 +246,45 @@ class _Stage2ScreenState extends State<Stage2Screen> {
                         }),
                       ),
                     ),
-                  Positioned(
-                    top: (_characterRow * (350 / 5)) + (350 / 10) - 25,
-                    left: (_characterCol * (350 / 5)) + (350 / 10) - 25,
-                    child: Image.asset(
-                      'assets/boy.png',
-                      width: 50,
-                      height: 50,
-                    ),
-                  ),
+
+                  // Apple 1
                   Positioned(
                     top: (0 * (350 / 5)) + (350 / 10) - (40 / 2),
-                    left: (2 * (350 / 5)) + (350 / 8) - (30 / 2),
+                    left: (4 * (350 / 5)) + (350 / 8) - (30 / 2),
                     child: Image.asset(
                       'assets/apple.png',
                       width: 30,
                       height: 40,
+                    ),
+                  ),
+                  // Apple 2
+                  Positioned(
+                    top: (0 * (350 / 5)) + (350 / 10) - (40 / 2),
+                    left: (0 * (350 / 5)) + (350 / 8) - (30 / 2),
+                    child: Image.asset(
+                      'assets/apple.png',
+                      width: 30,
+                      height: 40,
+                    ),
+                  ),
+                  // เจ้าชาย
+                  Positioned(
+                    top: (0 * (350 / 5)) + (350 / 10) - 25,
+                    left: (0 * (350 / 5)) + (350 / 10) - 25,
+                    child: Image.asset(
+                      'assets/boy.png',
+                      width: 60,
+                      height: 50,
+                    ),
+                  ),
+                  // เจ้าหญิง (ตำแหน่งที่ขยับได้)
+                  Positioned(
+                    top: (_characterRow * (350 / 5)) + (350 / 10) - 25,
+                    left: (_characterCol * (350 / 5)) + (350 / 10) - 25,
+                    child: Image.asset(
+                      'assets/girl.png',
+                      width: 50,
+                      height: 50,
                     ),
                   ),
                 ],
