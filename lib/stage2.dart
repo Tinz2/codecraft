@@ -1,3 +1,4 @@
+import 'package:codecraft/stage3.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -122,7 +123,11 @@ class _Stage2ScreenState extends State<Stage2Screen> {
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context); // ปิด dialog
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Stage3())); // ปิด dialog
                 },
                 child: Text('Go to Next Stage'),
               ),
